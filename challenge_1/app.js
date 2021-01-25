@@ -5,11 +5,12 @@ window.onload = function () {
 
 
   // Variable to keep track of whose turn it is
-  let Xturn = true;
+  let currentPlayer = 'X';
 
   // Adds event listener to each table cell
   document.querySelectorAll('#board td').forEach(el => el.addEventListener("click", handleClick));
 
+  // Handles clicks on the spaces
   function handleClick(clickedSpace) {
 
     // If turn is even, place X
@@ -17,30 +18,45 @@ window.onload = function () {
 
     let clicked = clickedSpace.target;
 
-    if (Xturn === true) {
-      clicked.innerHTML = "X";
-    } else {
-      clicked.innerHTML = "O";
+    if (clicked.innerHTML !== '') {
+      isEmpty();
     }
 
-    switchTurn();
+    clicked.innerHTML = currentPlayer;
+
+    switchPlayer();
+    updateBoardModel();
+
   }
 
+  let board = {
 
-  function switchTurn() {
+  };
 
-    if (Xturn) {
-      Xturn = false;
+
+  // // Pass in the space and the player
+  // updateBoardModel(){
+
+  // };
+
+
+  // Handles switching the player's turns
+  function switchPlayer() {
+
+    if (currentPlayer === 'X') {
+      currentPlayer = 'O';
     } else {
-      Xturn = true;
+      currentPlayer = 'X';
     }
+    return currentPlayer;
 
   };
 
-  // Function to check if the space is empty before playing
+  // Checks if the space is empty before playing
   function isEmpty() {
-
+    document.getElementById('text').innerHTML = 'Someone has already picked that space, please choose another!';
   };
+
 
   // New game button resets all table cells to empty
   document.getElementById('newgame').addEventListener('click', function () {
@@ -49,9 +65,7 @@ window.onload = function () {
     })
   });
 
-  let board = {
 
-  };
 
 
   // Keep track of which td has
