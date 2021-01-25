@@ -1,17 +1,33 @@
 
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+  color: coral;
+}
+
 button {
   margin-bottom: 20px;
+  background-color: coral;
+  border:none;
+  width: 150px;
+  height: 60x;
+  font-size:large;
 }
+
 table#board {
   width: 600px;
   height: 600px;
-  background-color: beige;
+  background-color: lightgrey;
   border: 1px solid blue;
+  border-collapse: collapse;
 }
 
 table#board td {
-  border: 1px solid blue;
+  border: 3px solid coral;
   width: 200px;
+  text-align: center;
 }
 
 #text {
