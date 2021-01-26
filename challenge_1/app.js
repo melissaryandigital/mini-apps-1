@@ -1,7 +1,5 @@
-
-
-// Create new board by adding to the DOM on page load
 window.onload = function () {
+
 
   let currentPlayer = 'X';
   let board = {};
@@ -16,16 +14,27 @@ window.onload = function () {
     [1, 5, 9],
     [3, 5, 7]
   ];
+  let message = ['Play on!', 'Game is over, click New Game button!', `It's a tie!  Click 'New Game' to start again!`, 'Someone has already picked that space, please choose another!' ];
+
+
+
+  // Adds event listener to New Game button
+  document.getElementById('newgame').addEventListener('click', newGame);
 
   // Adds event listener to each table cell
   document.querySelectorAll('#board td').forEach(el => el.addEventListener("click", handleClick));
 
+  // Changes game status message
+
+
   // Handles clicks on the spaces
   function handleClick(clickedSpace) {
 
+    document.getElementById('text').innerHTML = message[0];
     // If game is over, display a message and do now allow additional clicks
+
     if (!gameActive) {
-      document.getElementById('text').innerHTML = 'Game is over, click New Game button!';
+      document.getElementById('text').innerHTML = message[1];
     }
 
     if (gameActive) {
@@ -40,46 +49,38 @@ window.onload = function () {
       clicked.innerHTML = currentPlayer;
 
       updateBoardModel(clickedId, currentPlayer);
-      checkForWin(board, winningCombos, currentPlayer);
-
+      checkForWinOrTie(board, winningCombos, currentPlayer);
       switchPlayer();
     }
   };
 
-  // Pass in the space and the player
+  // Updates the current board object
   function updateBoardModel(spaceId, player) {
     board[spaceId] = player;
-    //console.log(board);
   };
 
-  function checkForWin(board, winningCombos, player) {
-
-    console.log(board);
-    console.log(winningCombos);
-    console.log(player);
-
-    // Loop through winning combos
-    // Check to see if currentBoard has currentPlayer in any of these spots
+  // Checks for win or tie
+  function checkForWinOrTie(board, winningCombos, player) {
 
     // Iterate through winning combos and see if current player's space match
-    // any of these combos
+    // Check to see if currentBoard has currentPlayer in any of these spots
     for (var i = 0; i < winningCombos.length; i++) {
       let space1 = board[winningCombos[i][0]];
       let space2 = board[winningCombos[i][1]];
       let space3 = board[winningCombos[i][2]];
-      //console.log(space1, space2, space3);
 
       if (space1 === player && space2 === player && space3 === player) {
-        console.log('We have a win!');
         document.getElementById('text').innerHTML = `Player ${currentPlayer} is the winner!`;
-        //console.log('spaces', space1, space2, space3);
-        //console.log(currentPlayer);
         gameActive = false;
       }
-
     }
 
-    // If
+    // Check to see if the board is full
+    console.log(Object.keys(board).length);
+    if (Object.keys(board).length === 9) {
+      document.getElementById('text').innerHTML = message[2];
+      gameActive = false;
+    }
 
   };
 
@@ -97,7 +98,7 @@ window.onload = function () {
 
   // Checks if the space is empty before playing
   function isEmpty() {
-    document.getElementById('text').innerHTML = 'Someone has already picked that space, please choose another!';
+    document.getElementById('text').innerHTML = message[3];
     // Need to remove this text
   };
 
@@ -107,19 +108,22 @@ window.onload = function () {
   // Updates board model to empty
   // Sets game status back to active
 
-  document.getElementById('newgame').addEventListener('click', function () {
+  function newGame() {
+    //document.getElementById('newgame').addEventListener('click', function () {
 
-    // Update game status to active
-    gameActive = true;
-    board = {};
+      // Update game status to active
+      gameActive = true;
+      isTie = false;
+      board = {};
+      document.getElementById('text').innerHTML = message[0];
 
-    document.querySelectorAll('#board td').forEach(el => {
-      el.innerHTML = '';
-    });
-
-  });
+      document.querySelectorAll('#board td').forEach(el => {
+        el.innerHTML = '';
+      });
 
 
+
+  }
 
 };
 

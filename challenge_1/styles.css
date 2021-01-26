@@ -14,8 +14,9 @@ h1 {
 
 button {
   margin-bottom: 20px;
+  padding:10px;
   background-color: coral;
-  border:none;
+  border-radius: 12px;
   width: 150px;
   height: 60x;
   font-size:large;
@@ -38,6 +39,9 @@ table#board td {
 #text {
   background-color: lightgray;
   font-size: large;
-  width: 600px;
-  height:100px;
+  font-weight: bold;
+  width: 560px;
+  height: 20px;
+  margin-bottom:30px;
+  padding: 20px;
 }
