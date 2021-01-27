@@ -3,10 +3,6 @@ const app = express();
 const port = 3000;
 const bodyParser = require('body-parser');
 
-// app.get('/', (req, res) => {
-//   res.send('Hello World!');
-// })
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('client'));
@@ -25,9 +21,12 @@ app.get('/', (req, res) => {
 
 app.post('/upload_json', (req, res) => {
 
-  let data = req.body;
+  // iterate and remove using string method
 
-  console.log(data);
+  let parsedData = req.body['json-input'].replace(/\n\r/, '');
+  console.log(parsedData);
+
+  console.log(typeof req.body['json-input']);
   console.log('got a post request from the index page');
 
   res.status(200);
