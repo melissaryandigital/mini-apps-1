@@ -19,11 +19,9 @@ app.listen(port, () => {
 
 // Create HTML form template to send in server response
 // Textarea is populated with user's initial input
-// let compiled = _.template('<h1>Mini App 2 - CSV Report Generator</h1><form action="/upload_json" method="POST" class="json-form"><textarea id="json-input" name="json-input" rows="50" cols="100"><%= inputData %></textarea><button type="submit" class="submit">SUBMIT</button></form><div id="csv"><%= csvData %></div>');
+let compiled = _.template('<h1>Mini App 2 - CSV Report Generator</h1><form action="/upload_json" method="POST" class="json-form"><textarea id="json-input" name="json-input" rows="50" cols="100"><%= inputData %></textarea><button type="submit" class="submit">SUBMIT</button></form><div id="csv"><%= csvData %></div>');
 
 // File picker version
-let compiled = _.template('<h1>Mini App 2 - CSV Report Generator</h1><form action="/upload_json" method="POST" class="json-form"><input type="file" id="json-file" name= "json-file" accept=".txt"><button type="submit" class="submit">SUBMIT</button></form><div id="csv"><%= csvData %></div>');
-
 let compiledFile = _.template('<h1>Mini App 2 - CSV Report Generator</h1><form action="/upload_json_file" method="POST" class="json-form-file"><input type="file" id="json-file" name= "json-file" accept=".json" enctype="multipart/form-data"><button type="submit" class="submit">SUBMIT</button></form><div id="csv"><%= csvData %></div>');
 
 
@@ -83,7 +81,7 @@ app.get('/', (req, res) => {
   res.end();
 });
 
-/*  TEXTAREA  */
+// TEXTAREA IMPLEMENTATION
 app.post('/upload_json', (req, res) => {
 
   // iterate and remove using string method
@@ -98,7 +96,7 @@ app.post('/upload_json', (req, res) => {
 });
 
 
-// File upload section
+// FILE UPLOAD IMPLEMENTATION
 
 // Disk storage for Multer
 const storage = multer.diskStorage({
@@ -106,7 +104,7 @@ const storage = multer.diskStorage({
     cb(null, './uploads')
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
+    cb(null, file.results);
   }
 });
 
@@ -114,10 +112,18 @@ var upload = multer({ storage: storage });
 
 app.post('/upload_json_file', upload.single('jsonfile'), function (req, res, next) {
 
-  console.log(req.file);
-
   try {
-    res.send(req.file);
+    fs.readFile('./uploads/results.json', 'utf8', (err, data) => {
+
+      if (err) throw err;
+
+      let csv = convertToCSV(data);
+
+      let resultsPage = compiledFile({ csvData: csv });
+
+      res.status(200).send(resultsPage);
+
+    });
   }
   catch (err) {
     res.send(400);
