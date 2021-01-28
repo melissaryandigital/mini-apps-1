@@ -1,6 +1,24 @@
+// Include jQuery
+var $ = require("jquery");
 
 // Prevent default on form submit
+$('#json-form-ajax').on('submit'), function(e) {
 
-document.querySelector('#json-form').addEventListener('click', function(event) {
-  event.preventDefault();
-})
+  // prevents default to redirect to new page
+  e.preventDefault();
+  console.log('click!');
+
+  $.ajax({
+    type: "POST",
+    url: "/upload_json_ajax",
+    accepts:
+    data: data,
+    success: function(data) {
+      console.log(data);
+    },
+    contentType: 'multipart/form-data',
+  });
+
+};å
+
+
