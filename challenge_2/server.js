@@ -1,8 +1,12 @@
 const express = require('express');
 const app = express();
 const port = 3000;
+
 const bodyParser = require('body-parser');
 const _ = require('underscore');
+const path = require('path');
+const fs = require('fs');
+const multer = require('multer');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -15,7 +19,12 @@ app.listen(port, () => {
 
 // Create HTML form template to send in server response
 // Textarea is populated with user's initial input
-let compiled = _.template('<h1>Mini App 2 - CSV Report Generator</h1><form action="/upload_json" method="POST" class="json-form"><textarea id="json-input" name="json-input" rows="50" cols="100"><%= inputData %></textarea><button type="submit" class="submit">SUBMIT</button></form><div id="csv"><%= csvData %></div>');
+// let compiled = _.template('<h1>Mini App 2 - CSV Report Generator</h1><form action="/upload_json" method="POST" class="json-form"><textarea id="json-input" name="json-input" rows="50" cols="100"><%= inputData %></textarea><button type="submit" class="submit">SUBMIT</button></form><div id="csv"><%= csvData %></div>');
+
+// File picker version
+let compiled = _.template('<h1>Mini App 2 - CSV Report Generator</h1><form action="/upload_json" method="POST" class="json-form"><input type="file" id="json-file" name= "json-file" accept=".txt"><button type="submit" class="submit">SUBMIT</button></form><div id="csv"><%= csvData %></div>');
+
+let compiledFile = _.template('<h1>Mini App 2 - CSV Report Generator</h1><form action="/upload_json_file" method="POST" class="json-form-file"><input type="file" id="json-file" name= "json-file" accept=".json" enctype="multipart/form-data"><button type="submit" class="submit">SUBMIT</button></form><div id="csv"><%= csvData %></div>');
 
 
 let convertToCSV = function (stringData) {
@@ -31,16 +40,12 @@ let convertToCSV = function (stringData) {
   // Iterate through first object and set properties as colNames
   for (var property in data) {
     if (property !== 'children') {
-    colNames += property + ',';
+      colNames += property + ',';
     };
   }
 
   colNames = colNames.slice(0, -1);
   colNames = colNames += '\n';
-
-  // Add a new line
-  // Add value plus a comma
-  // If there are children, repeat above
 
   let helper = function (node) {
     for (var property in node) {
@@ -63,12 +68,9 @@ let convertToCSV = function (stringData) {
 
   results = colNames + '<br />' + dataLines;
 
-  console.log(typeof results);
-  console.log(results);
-
   return results;
 
-}
+};
 
 
 app.get('/', (req, res) => {
@@ -81,6 +83,7 @@ app.get('/', (req, res) => {
   res.end();
 });
 
+/*  TEXTAREA  */
 app.post('/upload_json', (req, res) => {
 
   // iterate and remove using string method
@@ -91,5 +94,33 @@ app.post('/upload_json', (req, res) => {
   let resultsPage = compiled({ inputData: parsedData, csvData: csv });
 
   res.send(resultsPage);
+
+});
+
+
+// File upload section
+
+// Disk storage for Multer
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+
+var upload = multer({ storage: storage });
+
+app.post('/upload_json_file', upload.single('jsonfile'), function (req, res, next) {
+
+  console.log(req.file);
+
+  try {
+    res.send(req.file);
+  }
+  catch (err) {
+    res.send(400);
+  }
 
 });
