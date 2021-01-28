@@ -25,6 +25,7 @@ let convertToCSV = function (stringData) {
 
   // Build the first line of column names in the CSV output
   let colNames = '';
+  let dataLines = '';
 
   // Iterate through first object and set properties as colNames
   for (var property in data) {
@@ -32,13 +33,37 @@ let convertToCSV = function (stringData) {
   }
 
   colNames = colNames.slice(0, -1);
+  colNames = colNames += '\n';
 
+  // Add a new line
+  // Add value plus a comma
+  // If there are children, repeat above
 
+  let helper = function(node) {
+    for (var property in node ) {
+      if (property !== 'children')
+      dataLines += node[property] + ',';
+    }
 
+    dataLines = dataLines.slice(0, -1);
+    dataLines += '\n';
 
-  console.log('data', data);
+    if (node.children) {
+      node.children.forEach( node => {
+        helper(node);
+      });
+    }
+
+  }
+
+  helper(data);
+
 
   console.log('colNames ', colNames);
+  console.log(dataLines);
+
+  return csv = colNames + '\n' + dataLines;
+
 }
 
 
