@@ -26,10 +26,13 @@ let convertToCSV = function (stringData) {
   // Build the first line of column names in the CSV output
   let colNames = '';
   let dataLines = '';
+  let results = '';
 
   // Iterate through first object and set properties as colNames
   for (var property in data) {
+    if (property !== 'children') {
     colNames += property + ',';
+    };
   }
 
   colNames = colNames.slice(0, -1);
@@ -39,17 +42,17 @@ let convertToCSV = function (stringData) {
   // Add value plus a comma
   // If there are children, repeat above
 
-  let helper = function(node) {
-    for (var property in node ) {
+  let helper = function (node) {
+    for (var property in node) {
       if (property !== 'children')
-      dataLines += node[property] + ',';
+        dataLines += node[property] + ',';
     }
 
     dataLines = dataLines.slice(0, -1);
-    dataLines += '\n';
+    dataLines += '<br />';
 
     if (node.children) {
-      node.children.forEach( node => {
+      node.children.forEach(node => {
         helper(node);
       });
     }
@@ -58,11 +61,12 @@ let convertToCSV = function (stringData) {
 
   helper(data);
 
+  results = colNames + '<br />' + dataLines;
 
-  console.log('colNames ', colNames);
-  console.log(dataLines);
+  console.log(typeof results);
+  console.log(results);
 
-  return csv = colNames + '\n' + dataLines;
+  return results;
 
 }
 
@@ -84,7 +88,7 @@ app.post('/upload_json', (req, res) => {
 
   let csv = convertToCSV(parsedData);
 
-  let resultsPage = compiled({inputData: parsedData, csvData: csv});
+  let resultsPage = compiled({ inputData: parsedData, csvData: csv });
 
   res.send(resultsPage);
 
