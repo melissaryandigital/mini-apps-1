@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('client'));
 
 app.listen(port, () => {
-  console.log('Example app listening at http://localhost:${port}');
+  console.log(`Example app listening at http://localhost:${port}`);
 });
 
 
@@ -23,6 +23,10 @@ let compiled = _.template('<h1>Mini App 2 - CSV Report Generator</h1><form actio
 
 // File picker version
 let compiledFile = _.template('<h1>Mini App 2 - CSV Report Generator</h1><form action="/upload_json_file" method="POST" class="json-form-file"><input type="file" id="json-file" name= "json-file" accept=".json" enctype="multipart/form-data"><button type="submit" class="submit">SUBMIT</button></form><div id="csv"><%= csvData %></div>');
+
+
+// jQuery/ Ajax version
+let compiledFileAjax = _.template('<h2>jQuery/Ajax Request</h2><form action="" id="json-form-ajax" class="json-form-ajax" method="POST" enctype="multipart/form-data"> <input type="file" id="jsonfileajax" name= "jsonfileajax" accept=".json"><button type="submit" class="submit">SUBMIT</button></form><%= csvData %></div>');
 
 
 let convertToCSV = function (stringData) {
@@ -96,7 +100,7 @@ app.post('/upload_json', (req, res) => {
 });
 
 
-// FILE UPLOAD IMPLEMENTATION
+// MULTER CONFIG
 
 // Disk storage for Multer
 const storage = multer.diskStorage({
@@ -110,6 +114,9 @@ const storage = multer.diskStorage({
 
 var upload = multer({ storage: storage });
 
+
+
+// FILE UPLOAD IMPLEMENTATION
 app.post('/upload_json_file', upload.single('jsonfile'), function (req, res, next) {
 
   try {
@@ -120,6 +127,31 @@ app.post('/upload_json_file', upload.single('jsonfile'), function (req, res, nex
       let csv = convertToCSV(data);
 
       let resultsPage = compiledFile({ csvData: csv });
+
+      res.status(200).send(resultsPage);
+
+    });
+  }
+  catch (err) {
+    res.send(400);
+  }
+
+});
+
+
+// AJAX IMPLEMENTATION
+
+app.post('/', function (req, res, next) {
+
+  try {
+    fs.readFile('./uploads/results.json', 'utf8', (err, data) => {
+
+      console.log(data);
+      if (err) throw err;
+
+      let csv = convertToCSV(data);
+
+      let resultsPage = compiledFileAjax({ csvData: csv });
 
       res.status(200).send(resultsPage);
 
