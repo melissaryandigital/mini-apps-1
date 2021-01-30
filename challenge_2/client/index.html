@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Mini App 2 - CVS Report Generator</title>
-    <link rel="stylesheet" href="styles.css" />
+    <!--link rel="stylesheet" href="styles.css" /-->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <script src="app.js"></script>
 
@@ -10,7 +10,7 @@
     <h1>Mini App 2 - CSV Report Generator</h1>
     <h2>Textarea Submission</h2>
      <form action="/upload_json" method="POST" class="json-form">
-      <textarea id="json-input" name="json-input" rows="30" cols="100"></textarea>
+      <textarea id="json-input" name="json-input" rows="30" cols="100"></textarea><br />
       <button type="submit" class="submit">SUBMIT</button>
     </form>
 
@@ -21,7 +21,7 @@
     </form>
 
 
-    <h2>jQuery/Ajax Request</h2>
+    <h2>jQuery/Ajax Request w/ Download Report</h2>
     <form action="" id="json-form-ajax" class="json-form-ajax" enctype="multipart/form-data">
       <input type="file" id="jsonfileajax" name= "jsonfileajax" accept=".json">
       <button type="submit" class="submit">SUBMIT</button>

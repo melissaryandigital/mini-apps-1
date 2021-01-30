@@ -16,7 +16,7 @@ const fs = require('fs');
 
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`JSON to CSV app listening at http://localhost:${port}`);
 });
 
 
@@ -50,7 +50,7 @@ let convertToCSV = function (stringData) {
   }
 
   colNames = colNames.slice(0, -1);
-  colNames = colNames += '\n';
+//  colNames = colNames += '\n';
 
   let helper = function (node) {
     for (var property in node) {
@@ -175,7 +175,7 @@ app.post('/', upload.single('jsonfileajax'), function (req, res) {
 
       let csv = convertToCSV(data);
 
-      let csvreport = csv.replace(/<br \/>/g, '');
+      let csvreport = csv.replace(/<br \/>/g, '\n');
 
       fs.writeFile('./client/reports/CSVReport.csv', csvreport , (err) => {
         if (err) throw err;
