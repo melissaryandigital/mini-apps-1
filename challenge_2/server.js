@@ -177,7 +177,7 @@ app.post('/', upload.single('jsonfileajax'), function (req, res) {
 
       let csvreport = csv.replace(/<br \/>/g, '');
 
-      fs.writeFile('./downloads/CSVReport.csv', csvreport , (err) => {
+      fs.writeFile('./client/reports/CSVReport.csv', csvreport , (err) => {
         if (err) throw err;
         console.log('the file has been saved!');
       });
