@@ -1,5 +1,5 @@
 {
-    "firstName": "Potato",
+    "firstName": "Joshie",
     "lastName": "Wyattson",
     "county": "San Mateo",
     "city": "San Mateo",
@@ -22,16 +22,7 @@
           "role": "Sales Person",
           "sales": 4800000,
           "children": []
-        },
-        {
-          "firstName": "Allen",
-          "lastName": "Price",
-          "county": "San Mateo",
-          "city": "Burlingame",
-          "role": "Sales Person",
-          "sales": 2500000,
-          "children": []
-        }
+        }        
       ]
     },
     {

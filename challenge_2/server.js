@@ -4,13 +4,16 @@ const port = 3000;
 
 const bodyParser = require('body-parser');
 const _ = require('underscore');
-const path = require('path');
-const fs = require('fs');
+
 const multer = require('multer');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('client'));
+
+const path = require('path');
+const fs = require('fs');
+
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
@@ -22,11 +25,11 @@ app.listen(port, () => {
 let compiled = _.template('<h1>Mini App 2 - CSV Report Generator</h1><form action="/upload_json" method="POST" class="json-form"><textarea id="json-input" name="json-input" rows="50" cols="100"><%= inputData %></textarea><button type="submit" class="submit">SUBMIT</button></form><div id="csv"><%= csvData %></div>');
 
 // File picker version
-let compiledFile = _.template('<h1>Mini App 2 - CSV Report Generator</h1><form action="/upload_json_file" method="POST" class="json-form-file"><input type="file" id="json-file" name= "json-file" accept=".json" enctype="multipart/form-data"><button type="submit" class="submit">SUBMIT</button></form><div id="csv"><%= csvData %></div>');
+let compiledFile = _.template('<h1>Mini App 2 - CSV Report Generator</h1><form action="/upload_json_file" method="POST" class="json-form-file" enctype="multipart/form-data"><input type="file" id="json-file" name= "json-file" accept=".json"><button type="submit" class="submit">SUBMIT</button></form><div id="csv"><%= csvData %></div>');
 
 
 // jQuery/ Ajax version
-let compiledFileAjax = _.template('<h2>jQuery/Ajax Request</h2><form action="" id="json-form-ajax" class="json-form-ajax" method="POST" enctype="multipart/form-data"> <input type="file" id="jsonfileajax" name= "jsonfileajax" accept=".json"><button type="submit" class="submit">SUBMIT</button></form><%= csvData %></div>');
+let compiledFileAjax = _.template('<h2>jQuery/Ajax Request</h2><form id="json-form-ajax" class="json-form-ajax" enctype="multipart/form-data"> <input type="file" id="jsonfileajax" name= "jsonfileajax" accept=".json"><button type="submit" class="submit">SUBMIT</button></form><%= csvData %></div>');
 
 
 let convertToCSV = function (stringData) {
@@ -85,6 +88,8 @@ app.get('/', (req, res) => {
   res.end();
 });
 
+
+
 // TEXTAREA IMPLEMENTATION
 app.post('/upload_json', (req, res) => {
 
@@ -108,7 +113,7 @@ const storage = multer.diskStorage({
     cb(null, './uploads')
   },
   filename: function (req, file, cb) {
-    cb(null, file.results);
+    cb(null, file.originalname);
   }
 });
 
@@ -116,49 +121,74 @@ var upload = multer({ storage: storage });
 
 
 
+
 // FILE UPLOAD IMPLEMENTATION
-app.post('/upload_json_file', upload.single('jsonfile'), function (req, res, next) {
+app.post('/upload_json_file', upload.single('jsonfile'), function (req, res) {
 
-  try {
-    fs.readFile('./uploads/results.json', 'utf8', (err, data) => {
+  // console.log(req.file);
+  // console.log(req.file.path);
+  // console.log(req.body);
 
-      if (err) throw err;
+  return new Promise((resolve, reject) => {
+
+    fs.readFile(path.join(__dirname, req.file.path), 'utf8', (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
+  })
+    .then((data) => {
 
       let csv = convertToCSV(data);
-
       let resultsPage = compiledFile({ csvData: csv });
 
-      res.status(200).send(resultsPage);
-
+      res.send(resultsPage);
+      res.status(200);
+      res.end();
     });
-  }
-  catch (err) {
-    res.send(400);
-  }
 
 });
 
 
+
+
 // AJAX IMPLEMENTATION
+app.post('/', upload.single('jsonfileajax'), function (req, res) {
 
-app.post('/', function (req, res, next) {
+  // console.log(req.file);
+  // console.log(req.file.path);
+  // console.log(req.body);
 
-  try {
-    fs.readFile('./uploads/results.json', 'utf8', (err, data) => {
+  return new Promise((resolve, reject) => {
 
-      console.log(data);
-      if (err) throw err;
+    fs.readFile(path.join(__dirname, req.file.path), 'utf8', (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
+  })
+    .then((data) => {
 
       let csv = convertToCSV(data);
 
-      let resultsPage = compiledFileAjax({ csvData: csv });
+      let csvreport = csv.replace(/<br \/>/g, '');
 
-      res.status(200).send(resultsPage);
+      fs.writeFile('./downloads/CSVReport.csv', csvreport , (err) => {
+        if (err) throw err;
+        console.log('the file has been saved!');
+      });
 
-    });
-  }
-  catch (err) {
-    res.send(400);
-  }
-
+      res.send(csv);
+      res.status(200);
+      res.end();
+    })
+    .catch((err) => {
+      throw err;
+      res.status(500);
+      res.redirect('/');
+    })
 });
