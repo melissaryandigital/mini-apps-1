@@ -5,17 +5,20 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "react-dev": "npx babel ./client --out-dir ./public -w",
-    "server-dev": "nodemon server.js",
-    "start": "node server.js"
+    "react-dev": "./node_modules/.bin/babel client --out-dir public --presets @babel/preset-react --source-maps inline --watch",
+    "server-dev": "nodemon server.js"
   },
   "dependencies": {
+    "@babel/preset-env": "^7.12.16",
+    "browserify": "^17.0.0",
+    "express": "^4.17.1"
+  },
+  "description": "",
+  "devDependencies": {
     "@babel/cli": "^7.12.16",
     "@babel/core": "^7.12.16",
-    "@babel/preset-env": "^7.12.16",
     "@babel/preset-react": "^7.12.13",
-    "express": "^4.17.1",
+    "babelify": "^10.0.0",
     "nodemon": "^2.0.7"
-  },
-  "description": ""
+  }
 }
