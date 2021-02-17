@@ -45,10 +45,18 @@ class App extends React.Component {
 
 
   nextPage() {
-    console.log('called nextPage');
-    this.setState({
-      page: this.state.page + 1
-    });
+    if (this.state.page === 3) {
+      console.log('Checkout successful!')
+      this.setState({
+        page: 0
+      });
+
+    } else {
+
+      this.setState({
+        page: this.state.page + 1
+      });
+    }
   }
 
   previousPage() {
