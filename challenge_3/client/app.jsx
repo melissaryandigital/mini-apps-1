@@ -7,15 +7,10 @@ class App extends React.Component {
       orderInfo: {}
     }
 
-    this.startCheckout = this.startCheckout.bind(this);
+    this.nextPage = this.nextPage.bind(this);
+    this.previousPage = this.previousPage.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit(this);
-  }
-
-  startCheckout() {
-    this.setState({
-      page: 1
-    });
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
 
@@ -30,28 +25,36 @@ class App extends React.Component {
 
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
     // Sends orderInfo to server
+
+    e.preventDefault();
 
     let order = this.state.orderInfo;
 
     $.ajax({
       type: "POST",
       url: '/order',
-      data: {order},
+      data: { order },
       success: function (data) {
         console.log('POSTED to /order');
-        console.log(data);
       }
     })
-    .done(()=> {this.changePage();})
+      .done(() => { this.nextPage(); })
   }
 
-  changePage() {
+
+  nextPage() {
+    console.log('called nextPage');
     this.setState({
       page: this.state.page + 1
     });
-    console.log('page change');
+  }
+
+  previousPage() {
+    this.setState({
+      page: this.state.page - 1
+    });
   }
 
   render() {
@@ -59,7 +62,7 @@ class App extends React.Component {
     if (this.state.page === 0) {
       return (<div>
         <h2>Checkout Process</h2>
-        <div><button onClick={this.startCheckout}>Checkout</button></div>
+        <div><button onClick={this.nextPage}>Checkout</button></div>
       </div>);
     }
     if (this.state.page === 1) {
@@ -73,6 +76,7 @@ class App extends React.Component {
           <input type="text" name="email" value={this.state.orderInfo.value} onChange={this.handleChange}></input><br /><br />
           <label>Password:</label><br />
           <input type="text" name="password" value={this.state.orderInfo.value} onChange={this.handleChange}></input><br /><br />
+          <button onClick={this.previousPage}>Previous</button>
           <button id="f1" name="f1" onClick={this.handleSubmit}>Next</button>
         </form>
       </div>)

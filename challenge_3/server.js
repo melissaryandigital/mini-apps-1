@@ -40,7 +40,6 @@ const orderSchema = new mongoose.Schema({
 const Order = mongoose.model('Order', orderSchema);
 
 
-
 app.get('/', (req, res) => {
   res.send('Hello world!');
 });
@@ -48,8 +47,16 @@ app.get('/', (req, res) => {
 app.post('/order', (req, res) => {
   console.log('POST received to /order route');
 
+  console.log('request body ', req.body);
+  let orderData = req.body;
+
+
+  //
   // Send the mongo ID back to the client and save in state
-  res.send('Hello world!');
+
+  // Keeps form from re-POSTing
+  res.redirect(301, '/');
+
 });
 
 app.listen(port, () => {
