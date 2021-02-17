@@ -45,6 +45,13 @@ app.get('/', (req, res) => {
   res.send('Hello world!');
 });
 
+app.post('/order', (req, res) => {
+  console.log('POST received to /order route');
+
+  // Send the mongo ID back to the client and save in state
+  res.send('Hello world!');
+});
+
 app.listen(port, () => {
   console.log(`Checkout app listening at http://localhost:${port}`);
 });
