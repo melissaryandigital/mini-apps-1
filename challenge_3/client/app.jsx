@@ -64,10 +64,13 @@ class App extends React.Component {
 
   nextPage() {
 
+    // On last form submission, reset state to initial
+    // Alert user of successful purchase
     if (this.state.page === 4) {
       alert('Purchase successful!');
       this.setState({
-        page: 0
+        page: 0,
+        orderInfo: {}
       });
 
     } else {
