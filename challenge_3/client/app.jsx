@@ -35,18 +35,32 @@ class App extends React.Component {
     $.ajax({
       type: "POST",
       url: '/order',
-      data: { order },
+      data: order,
       success: function (data) {
         console.log('POSTED to /order');
+        console.log(data);
+
       }
     })
-      .done(() => { this.nextPage(); })
+      .done((data) => { this.nextPage(data); })
   }
 
 
-  nextPage() {
-    if (this.state.page === 3) {
-      console.log('Checkout successful!')
+  nextPage(data) {
+    // On first form submit
+    // Get document ID from server
+    // Add it to state
+    if (this.state.page === 1) {
+      this.setState({
+        orderId: data
+      });
+
+    } else {
+
+    // On last form submit
+    // Reset page to homepage
+    if (this.state.page === 4) {
+      alert('Purchase successful!');
       this.setState({
         page: 0
       });
@@ -64,6 +78,7 @@ class App extends React.Component {
       page: this.state.page - 1
     });
   }
+
 
   render() {
 
@@ -131,7 +146,34 @@ class App extends React.Component {
       </div>)
 
     }
+
+    if (this.state.page === 4) {
+
+      return (<div>
+        <div>Order confirmation</div>
+
+        <p>{this.state.orderInfo.name}</p>
+        <p>{this.state.orderInfo.email}</p>
+        <p>{this.state.orderInfo.password}</p>
+        <p>{this.state.orderInfo.address1}</p>
+        <p>{this.state.orderInfo.address2}</p>
+        <p>{this.state.orderInfo.city}</p>
+        <p>{this.state.orderInfo.state}</p>
+        <p>{this.state.orderInfo.zip}</p>
+        <p>{this.state.orderInfo.phone}</p>
+        <p>{this.state.orderInfo.cardNumber}</p>
+        <p>{this.state.orderInfo.cardExpiry}</p>
+        <p>{this.state.orderInfo.CVV}</p>
+        <p>{this.state.orderInfo.billingZip}</p>
+
+        <button id="f4" name="f4" onClick={this.handleSubmit}>Purchase</button>
+
+      </div>)
+
+    }
   }
+
+
 }
 
 ReactDOM.render(<App />, document.getElementById('app'));
