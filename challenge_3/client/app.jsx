@@ -56,9 +56,9 @@ class App extends React.Component {
       this.setState({
         orderInfo
       });
-
-      this.nextPage();
     }
+
+    this.nextPage();
   }
 
 

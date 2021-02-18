@@ -71,7 +71,6 @@ app.post('/order', (req, res) => {
         function (err, data) {
           if (err) return console.log(err);
 
-          // Issue is that form stops submitting if it finds an existing record
           res.send(data);
         });
 
