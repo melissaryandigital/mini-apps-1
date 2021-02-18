@@ -45,22 +45,41 @@ app.get('/', (req, res) => {
 
 app.post('/order', (req, res) => {
 
-  // Receive data from client in request
-  console.log('request body ', req.body);
   let orderData = req.body;
-
-  // Check the document id
-  // If it exists, update the document
 
   Order.findById(orderData.orderId, function (err, orderId) {
     if (err) return console.log(error);
 
     if (orderId) {
-      // Update the existing order
+
+      console.log('found an existing id', orderData.orderId);
+
+      Order.updateOne(
+        { _id: orderData.orderId },
+        {
+          address1: orderData.address1,
+          address2: orderData.address2,
+          city: orderData.city,
+          state: orderData.state,
+          zip: orderData.zip,
+          phone: orderData.phone,
+          cardNumber: orderData.cardNumber,
+          expiry: orderData.cardExpiry,
+          CVV: orderData.CVV,
+          billingZip: orderData.billingZip
+        },
+        function (err, data) {
+          if (err) return console.log(err);
+
+          // Issue is that form stops submitting if it finds an existing record
+          res.send(data);
+        });
+
+
 
     } else {
 
-      // Create a new one and save
+      // Create a new document
 
       const order = new Order({
         name: orderData.name,
@@ -84,16 +103,12 @@ app.post('/order', (req, res) => {
 
         console.log('order saved', order._id);
       });
+
+      // Send the mongo ID back to the client and save in state
+      res.send(order._id);
     }
 
   });
-
-  // Get the document ID
-  // Send the mongo ID back to the client and save in state
-
-  // Keeps form from re-POSTing
-  res.send(order._id);
-  //res.redirect(301, '/');
 
 });
 

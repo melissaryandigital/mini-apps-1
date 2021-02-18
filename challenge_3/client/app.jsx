@@ -11,6 +11,7 @@ class App extends React.Component {
     this.previousPage = this.previousPage.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.updateOrderId = this.updateOrderId.bind(this);
   }
 
 
@@ -42,23 +43,27 @@ class App extends React.Component {
 
       }
     })
-      .done((data) => { this.nextPage(data); })
+      .done((data) => { this.updateOrderId(data); })
   }
 
 
-  nextPage(data) {
-    // On first form submit
-    // Get document ID from server
-    // Add it to state
+  updateOrderId(data) {
     if (this.state.page === 1) {
+      console.log(data);
+      var orderInfo = { ...this.state.orderInfo }
+      orderInfo.orderId = data;
+
       this.setState({
-        orderId: data
+        orderInfo
       });
 
-    } else {
+      this.nextPage();
+    }
+  }
 
-    // On last form submit
-    // Reset page to homepage
+
+  nextPage() {
+
     if (this.state.page === 4) {
       alert('Purchase successful!');
       this.setState({
@@ -66,7 +71,6 @@ class App extends React.Component {
       });
 
     } else {
-
       this.setState({
         page: this.state.page + 1
       });
