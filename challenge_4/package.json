@@ -1,0 +1,30 @@
+{
+  "name": "challenge_4",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "react-dev": "webpack --mode=development --watch",
+    "start": "node server.js"
+  },
+  "author": "Melissa Ryan",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.17",
+    "@babel/preset-env": "^7.12.17",
+    "@babel/preset-react": "^7.12.13",
+    "babel-loader": "^8.2.2",
+    "chai": "^4.3.0",
+    "html-webpack-plugin": "^5.2.0",
+    "mocha": "^8.3.0",
+    "nodemon": "^2.0.7",
+    "webpack": "^5.23.0",
+    "webpack-cli": "^4.5.0"
+  }
+}
