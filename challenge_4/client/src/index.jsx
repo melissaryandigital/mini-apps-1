@@ -7,45 +7,43 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      player: 1,
+      tie: false,
+      board: {}
     }
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(e) {
+    e.preventDefault();
+
+    console.log('square clicked');
   }
 
 
   render() {
     return (
       <div>
-        <h2>Connect Four!</h2>
-        <div class="board">
-          <div class="row">
-          <Square x={0} y={0}/>
-          <Square x={1} y={0}/>
-          <Square x={2} y={0}/>
-          <Square x={3} y={0}/>
+        <div className="grid-container">
+          <Square x={0} y={0} handleClick={this.handleClick}/>
+          <Square x={1} y={0} handleClick={this.handleClick}/>
+          <Square x={2} y={0} handleClick={this.handleClick}/>
+          <Square x={3} y={0} handleClick={this.handleClick}/>
+          <Square x={0} y={1} handleClick={this.handleClick}/>
+          <Square x={1} y={1} handleClick={this.handleClick}/>
+          <Square x={2} y={1} handleClick={this.handleClick}/>
+          <Square x={3} y={1} handleClick={this.handleClick}/>
+          <Square x={0} y={2} handleClick={this.handleClick}/>
+          <Square x={1} y={2} handleClick={this.handleClick}/>
+          <Square x={2} y={2} handleClick={this.handleClick}/>
+          <Square x={3} y={2} handleClick={this.handleClick}/>
+          <Square x={0} y={3} handleClick={this.handleClick}/>
+          <Square x={1} y={3} handleClick={this.handleClick}/>
+          <Square x={2} y={3} handleClick={this.handleClick}/>
+          <Square x={3} y={3} handleClick={this.handleClick}/>
           </div>
-          <div class="row">
-          <Square x={0} y={1}/>
-          <Square x={1} y={1}/>
-          <Square x={2} y={1}/>
-          <Square x={3} y={1}/>
-          </div>
-          <div class="row">
-          <Square x={0} y={2}/>
-          <Square x={1} y={2}/>
-          <Square x={2} y={2}/>
-          <Square x={3} y={2}/>
-          </div>
-          <div class="row">
-          <Square x={0} y={3}/>
-          <Square x={1} y={3}/>
-          <Square x={2} y={3}/>
-          <Square x={3} y={3}/>
-          </div>
-        </div>
-
-
-      </div>
-    )
+        </div>    )
   }
 }
 
