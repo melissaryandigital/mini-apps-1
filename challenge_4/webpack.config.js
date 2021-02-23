@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   entry: __dirname + '/client/src/index.jsx',
@@ -7,10 +8,12 @@ module.exports = {
     path: __dirname + '/client/dist'
   },
   mode: 'development',
-  plugins: [new HtmlWebpackPlugin({
-    filename: "index.html",
-    template: __dirname + "/client/src/index.html"
-  })],
+  plugins: [
+    new HtmlWebpackPlugin({
+      filename: "index.html",
+      template: __dirname + "/client/src/index.html"
+    }),
+    new MiniCssExtractPlugin()],
   module: {
     rules: [
       {
@@ -22,6 +25,10 @@ module.exports = {
             presets: ['@babel/preset-react', '@babel/preset-env']
           }
         }
+      },
+      {
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader']
       }
     ]
   }
