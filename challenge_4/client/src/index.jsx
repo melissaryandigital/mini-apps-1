@@ -13,8 +13,8 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <h2>Hello</h2>
-      </div>
+        <h2>Changes inside the JS</h2>
+ Yoooo      </div>
     )
   }
 }

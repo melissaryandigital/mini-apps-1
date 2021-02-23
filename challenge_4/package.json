@@ -5,13 +5,14 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "react-dev": "webpack --mode=development --watch",
+    "react-dev": "webpack serve",
     "start": "node server.js"
   },
   "author": "Melissa Ryan",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
+    "express": "^4.17.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   },
@@ -25,6 +26,7 @@
     "mocha": "^8.3.0",
     "nodemon": "^2.0.7",
     "webpack": "^5.23.0",
-    "webpack-cli": "^4.5.0"
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2"
   }
 }
