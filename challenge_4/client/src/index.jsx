@@ -7,19 +7,87 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      player: 1,
+      player: 'X',
       tie: false,
-      board: {}
+      board: []
     }
 
     this.handleClick = this.handleClick.bind(this);
+    this.changePlayerTurn = this.changePlayerTurn.bind(this);
+    this.updateBoardModel = this.updateBoardModel.bind(this);
+
+  }
+
+
+  componentDidMount() {
+
   }
 
   handleClick(e) {
     e.preventDefault();
 
-
     console.log('x:', e.target.getAttribute('data-x'), ' y: ', e.target.getAttribute('data-y'));
+    let xPos = e.target.getAttribute('data-x');
+    let yPos = e.target.getAttribute('data-y');
+
+    let square = e.target;
+
+    // Check if the square is already occupied
+    if (square.innerHTML !== '') {
+      alert('Please choose another square, that one has already been taken.');
+      return;
+    }
+
+    square.innerHTML += this.state.player;
+
+
+    this.changePlayerTurn();
+    this.updateBoard(xPos, yPos);
+
+  }
+
+  updateBoardModel() {
+
+    // Get the coordinates
+    // Assign the player to that coordinate
+    // Update the board model
+
+    this.setState({
+      board: joined
+    });
+
+
+  }
+
+  checkForWinHorizontal() {
+
+  }
+
+  checkForWinVertical() {
+
+  }
+
+  checkForWinDiagonal() {
+
+  }
+
+  checkForTie() {
+
+  }
+
+  // Using X and O for now, will come back and style when functionality complete
+  changePlayerTurn() {
+
+    if (this.state.player === 'X') {
+      this.setState({
+        player: 'O'
+      })
+    } else {
+      this.setState({
+        player: 'X'
+      })
+    };
+
   }
 
 
