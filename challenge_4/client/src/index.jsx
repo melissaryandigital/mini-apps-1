@@ -9,14 +9,21 @@ class App extends React.Component {
     this.state = {
       player: 'red',
       tie: false,
-      board: {},
-      rowPlacementOnYAxis: [5,5,5,5,5,5]
+      boardModel: [
+        ['', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '']
+      ],
+      rowPlacementOnYAxis: [5, 5, 5, 5, 5, 5, 5]
     }
 
     this.handleClick = this.handleClick.bind(this);
     this.placePiece = this.placePiece.bind(this);
-    this.changePlayerTurn = this.changePlayerTurn.bind(this);
     this.updateBoardModel = this.updateBoardModel.bind(this);
+    this.changePlayerTurn = this.changePlayerTurn.bind(this);
 
   }
 
@@ -33,22 +40,18 @@ class App extends React.Component {
 
     console.log('x:', e.target.getAttribute('data-x'), ' y: ', e.target.getAttribute('data-y'));
     let xPos = e.target.getAttribute('data-x');
-    let yPos = e.target.getAttribute('data-y');
-
-    let square = e.target;
 
     // Check if the column is full
-    // For the column clicked, check if rowIndex equals 0
-
-    if (this.state.rowPlacementOnYAxis[xPos] === -1 ) {
+    if (this.state.rowPlacementOnYAxis[xPos] === -1) {
       alert('This column is full, please pick another column');
     }
 
 
 
     this.placePiece(xPos);
+    this.updateBoardModel(xPos);
+    this.updateRowAvailableSpace(xPos);
     this.changePlayerTurn();
-    this.updateBoardModel(xPos, yPos);
 
   }
 
@@ -61,28 +64,32 @@ class App extends React.Component {
     // Selecting that square
     document.querySelector(`[data-x="${x}"][data-y="${colPlacement}"]`).classList.add(`${this.state.player}`);
 
-    // Decrement the index of the Y axis so next piece dropped in this column will fall on top
+  }
+
+  updateBoardModel(x) {
+
+    // Get the position of the piece that was just played
+    // Add it to the boardModel
+
+
+    let updatedBoard = this.state.boardModel;
+    updatedBoard[x][this.state.rowPlacementOnYAxis[x]] = this.state.player;
+
+    this.setState({
+      boardModel: updatedBoard
+    })
+  }
+
+  // Decrement the index of the Y axis so next piece dropped in this column will fall on top
+
+  updateRowAvailableSpace(x) {
 
     let newRowPlacementOnYAxis = this.state.rowPlacementOnYAxis;
     newRowPlacementOnYAxis[x]--;
 
     this.setState({
       rowPlacementOnYAxis: newRowPlacementOnYAxis
-    })
-
-  }
-
-  updateBoardModel() {
-
-    // Get the coordinates
-    // Assign the player to that coordinate
-    // Update the board model
-
-    // this.setState({
-    //   board: joined
-    // });
-
-
+    });
   }
 
   checkForWinHorizontal() {
