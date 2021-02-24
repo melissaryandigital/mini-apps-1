@@ -7,12 +7,14 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      player: 'X',
+      player: 'red',
       tie: false,
-      board: []
+      board: {},
+      rowPlacementOnYAxis: [5,5,5,5,5,5]
     }
 
     this.handleClick = this.handleClick.bind(this);
+    this.placePiece = this.placePiece.bind(this);
     this.changePlayerTurn = this.changePlayerTurn.bind(this);
     this.updateBoardModel = this.updateBoardModel.bind(this);
 
@@ -32,17 +34,38 @@ class App extends React.Component {
 
     let square = e.target;
 
-    // Check if the square is already occupied
-    if (square.innerHTML !== '') {
-      alert('Please choose another square, that one has already been taken.');
-      return;
+    // Check if the column is full
+    // For the column clicked, check if rowIndex equals 0
+
+    if (this.state.rowPlacementOnYAxis[xPos] === -1 ) {
+      alert('This column is full, please pick another column');
     }
 
-    square.innerHTML += this.state.player;
 
 
+    this.placePiece(xPos);
     this.changePlayerTurn();
-    this.updateBoard(xPos, yPos);
+    this.updateBoardModel(xPos, yPos);
+
+  }
+
+  // Places the piece and increments
+  placePiece(x) {
+
+    // What Y axis slot to place in clicked row
+    let colPlacement = this.state.rowPlacementOnYAxis[x];
+
+    // Selecting that square
+    document.querySelector(`[data-x="${x}"][data-y="${colPlacement}"]`).classList.add(`${this.state.player}`);
+
+    // Decrement the index of the Y axis so next piece dropped in this column will fall on top
+
+    let newRowPlacementOnYAxis = this.state.rowPlacementOnYAxis;
+    newRowPlacementOnYAxis[x]--;
+
+    this.setState({
+      rowPlacementOnYAxis: newRowPlacementOnYAxis
+    })
 
   }
 
@@ -52,9 +75,9 @@ class App extends React.Component {
     // Assign the player to that coordinate
     // Update the board model
 
-    this.setState({
-      board: joined
-    });
+    // this.setState({
+    //   board: joined
+    // });
 
 
   }
@@ -78,13 +101,13 @@ class App extends React.Component {
   // Using X and O for now, will come back and style when functionality complete
   changePlayerTurn() {
 
-    if (this.state.player === 'X') {
+    if (this.state.player === 'red') {
       this.setState({
-        player: 'O'
+        player: 'blue'
       })
     } else {
       this.setState({
-        player: 'X'
+        player: 'red'
       })
     };
 
