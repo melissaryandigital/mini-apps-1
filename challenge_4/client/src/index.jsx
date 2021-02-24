@@ -18,7 +18,8 @@ class App extends React.Component {
   handleClick(e) {
     e.preventDefault();
 
-    console.log('square clicked');
+
+    console.log('x:', e.target.getAttribute('data-x'), ' y: ', e.target.getAttribute('data-y'));
   }
 
 
@@ -69,13 +70,13 @@ class App extends React.Component {
           <Square x={5} y={4} handleClick={this.handleClick} />
           <Square x={6} y={4} handleClick={this.handleClick} />
 
-          <Square x={0} y={4} handleClick={this.handleClick} />
-          <Square x={1} y={4} handleClick={this.handleClick} />
-          <Square x={2} y={4} handleClick={this.handleClick} />
-          <Square x={3} y={4} handleClick={this.handleClick} />
-          <Square x={4} y={4} handleClick={this.handleClick} />
-          <Square x={5} y={4} handleClick={this.handleClick} />
-          <Square x={6} y={4} handleClick={this.handleClick} />
+          <Square x={0} y={5} handleClick={this.handleClick} />
+          <Square x={1} y={5} handleClick={this.handleClick} />
+          <Square x={2} y={5} handleClick={this.handleClick} />
+          <Square x={3} y={5} handleClick={this.handleClick} />
+          <Square x={4} y={5} handleClick={this.handleClick} />
+          <Square x={5} y={5} handleClick={this.handleClick} />
+          <Square x={6} y={5} handleClick={this.handleClick} />
         </div>
       </div>)
   }
