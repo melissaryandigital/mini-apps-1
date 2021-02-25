@@ -10,13 +10,12 @@ class App extends React.Component {
       player: 'red',
       tie: false,
       boardModel: [
-        ['', '', '', '', '', ''],
-        ['', '', '', '', '', ''],
-        ['', '', '', '', '', ''],
-        ['', '', '', '', '', ''],
-        ['', '', '', '', '', ''],
-        ['', '', '', '', '', ''],
-        ['', '', '', '', '', '']
+        ['', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '']
       ],
       rowPlacementOnYAxis: [5, 5, 5, 5, 5, 5, 5]
     }
@@ -39,42 +38,42 @@ class App extends React.Component {
   handleClick(e) {
     e.preventDefault();
 
-    console.log('x:', e.target.getAttribute('data-x'), ' y: ', e.target.getAttribute('data-y'));
-    let xPos = e.target.getAttribute('data-x');
+    console.log('row:', e.target.getAttribute('data-row'), ' col: ', e.target.getAttribute('data-col'));
+    let col = e.target.getAttribute('data-col');
 
     // Check if the column is full
-    if (this.state.rowPlacementOnYAxis[xPos] === -1) {
+    if (this.state.rowPlacementOnYAxis[col] === -1) {
       alert('This column is full, please pick another column');
     }
 
 
 
-    this.placePiece(xPos);
-    this.updateBoardModel(xPos);
-    this.updateRowAvailableSpace(xPos);
+    this.placePiece(col);
+    this.updateBoardModel(col);
+    this.updateRowAvailableSpace(col);
     this.changePlayerTurn();
 
   }
 
   // Places the piece and increments
-  placePiece(x) {
+  placePiece(col) {
 
     // What Y axis slot to place in clicked row
-    let colPlacement = this.state.rowPlacementOnYAxis[x];
+    let rowPlacement = this.state.rowPlacementOnYAxis[col];
 
     // Selecting that square
-    document.querySelector(`[data-x="${x}"][data-y="${colPlacement}"]`).classList.add(`${this.state.player}`);
+    document.querySelector(`[data-row="${rowPlacement}"][data-col="${col}"]`).classList.add(`${this.state.player}`);
 
   }
 
-  updateBoardModel(x) {
+  updateBoardModel(col) {
 
     // Get the position of the piece that was just played
     // Add it to the boardModel
 
 
     let updatedBoard = this.state.boardModel;
-    updatedBoard[x][this.state.rowPlacementOnYAxis[x]] = this.state.player;
+    updatedBoard[this.state.rowPlacementOnYAxis[col]][col] = this.state.player;
 
     this.setState({
       boardModel: updatedBoard
@@ -83,10 +82,10 @@ class App extends React.Component {
 
   // Decrement the index of the Y axis so next piece dropped in this column will fall on top
 
-  updateRowAvailableSpace(x) {
+  updateRowAvailableSpace(col) {
 
     let newRowPlacementOnYAxis = this.state.rowPlacementOnYAxis;
-    newRowPlacementOnYAxis[x]--;
+    newRowPlacementOnYAxis[col]--;
 
     this.setState({
       rowPlacementOnYAxis: newRowPlacementOnYAxis
@@ -132,54 +131,55 @@ class App extends React.Component {
     return (
       <div>
         <div className="grid-container">
-          <Square x={0} y={0} handleClick={this.handleClick} />
-          <Square x={1} y={0} handleClick={this.handleClick} />
-          <Square x={2} y={0} handleClick={this.handleClick} />
-          <Square x={3} y={0} handleClick={this.handleClick} />
-          <Square x={4} y={0} handleClick={this.handleClick} />
-          <Square x={5} y={0} handleClick={this.handleClick} />
-          <Square x={6} y={0} handleClick={this.handleClick} />
+          <Square row={0} col={0} handleClick={this.handleClick} />
+          <Square row={0} col={1} handleClick={this.handleClick} />
+          <Square row={0} col={2} handleClick={this.handleClick} />
+          <Square row={0} col={3} handleClick={this.handleClick} />
+          <Square row={0} col={4} handleClick={this.handleClick} />
+          <Square row={0} col={5} handleClick={this.handleClick} />
+          <Square row={0} col={6} handleClick={this.handleClick} />
 
-          <Square x={0} y={1} handleClick={this.handleClick} />
-          <Square x={1} y={1} handleClick={this.handleClick} />
-          <Square x={2} y={1} handleClick={this.handleClick} />
-          <Square x={3} y={1} handleClick={this.handleClick} />
-          <Square x={4} y={1} handleClick={this.handleClick} />
-          <Square x={5} y={1} handleClick={this.handleClick} />
-          <Square x={6} y={1} handleClick={this.handleClick} />
+          <Square row={1} col={0} handleClick={this.handleClick} />
+          <Square row={1} col={1} handleClick={this.handleClick} />
+          <Square row={1} col={2} handleClick={this.handleClick} />
+          <Square row={1} col={3} handleClick={this.handleClick} />
+          <Square row={1} col={4} handleClick={this.handleClick} />
+          <Square row={1} col={5} handleClick={this.handleClick} />
+          <Square row={1} col={6} handleClick={this.handleClick} />
 
-          <Square x={0} y={2} handleClick={this.handleClick} />
-          <Square x={1} y={2} handleClick={this.handleClick} />
-          <Square x={2} y={2} handleClick={this.handleClick} />
-          <Square x={3} y={2} handleClick={this.handleClick} />
-          <Square x={4} y={2} handleClick={this.handleClick} />
-          <Square x={5} y={2} handleClick={this.handleClick} />
-          <Square x={6} y={2} handleClick={this.handleClick} />
+          <Square row={2} col={0} handleClick={this.handleClick} />
+          <Square row={2} col={1} handleClick={this.handleClick} />
+          <Square row={2} col={2} handleClick={this.handleClick} />
+          <Square row={2} col={3} handleClick={this.handleClick} />
+          <Square row={2} col={4} handleClick={this.handleClick} />
+          <Square row={2} col={5} handleClick={this.handleClick} />
+          <Square row={2} col={6} handleClick={this.handleClick} />
 
-          <Square x={0} y={3} handleClick={this.handleClick} />
-          <Square x={1} y={3} handleClick={this.handleClick} />
-          <Square x={2} y={3} handleClick={this.handleClick} />
-          <Square x={3} y={3} handleClick={this.handleClick} />
-          <Square x={4} y={3} handleClick={this.handleClick} />
-          <Square x={5} y={3} handleClick={this.handleClick} />
-          <Square x={6} y={3} handleClick={this.handleClick} />
+          <Square row={3} col={0} handleClick={this.handleClick} />
+          <Square row={3} col={1} handleClick={this.handleClick} />
+          <Square row={3} col={2} handleClick={this.handleClick} />
+          <Square row={3} col={3} handleClick={this.handleClick} />
+          <Square row={3} col={4} handleClick={this.handleClick} />
+          <Square row={3} col={5} handleClick={this.handleClick} />
+          <Square row={3} col={6} handleClick={this.handleClick} />
 
-          <Square x={0} y={4} handleClick={this.handleClick} />
-          <Square x={1} y={4} handleClick={this.handleClick} />
-          <Square x={2} y={4} handleClick={this.handleClick} />
-          <Square x={3} y={4} handleClick={this.handleClick} />
-          <Square x={4} y={4} handleClick={this.handleClick} />
-          <Square x={5} y={4} handleClick={this.handleClick} />
-          <Square x={6} y={4} handleClick={this.handleClick} />
+          <Square row={4} col={0} handleClick={this.handleClick} />
+          <Square row={4} col={1} handleClick={this.handleClick} />
+          <Square row={4} col={2} handleClick={this.handleClick} />
+          <Square row={4} col={3} handleClick={this.handleClick} />
+          <Square row={4} col={4} handleClick={this.handleClick} />
+          <Square row={4} col={5} handleClick={this.handleClick} />
+          <Square row={4} col={6} handleClick={this.handleClick} />
 
-          <Square x={0} y={5} handleClick={this.handleClick} />
-          <Square x={1} y={5} handleClick={this.handleClick} />
-          <Square x={2} y={5} handleClick={this.handleClick} />
-          <Square x={3} y={5} handleClick={this.handleClick} />
-          <Square x={4} y={5} handleClick={this.handleClick} />
-          <Square x={5} y={5} handleClick={this.handleClick} />
-          <Square x={6} y={5} handleClick={this.handleClick} />
+          <Square row={5} col={0} handleClick={this.handleClick} />
+          <Square row={5} col={1} handleClick={this.handleClick} />
+          <Square row={5} col={2} handleClick={this.handleClick} />
+          <Square row={5} col={3} handleClick={this.handleClick} />
+          <Square row={5} col={4} handleClick={this.handleClick} />
+          <Square row={5} col={5} handleClick={this.handleClick} />
+          <Square row={5} col={6} handleClick={this.handleClick} />
         </div>
+
       </div>)
   }
 }
