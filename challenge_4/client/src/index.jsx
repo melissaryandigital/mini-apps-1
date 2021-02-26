@@ -8,8 +8,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       player: 'Red',
+      gameActive: true,
       tie: false,
-      win: false,
       message: '',
       boardModel: [
         ['', '', '', '', '', '', ''],
@@ -26,6 +26,7 @@ class App extends React.Component {
     this.placePiece = this.placePiece.bind(this);
     this.updateBoardModel = this.updateBoardModel.bind(this);
     this.checkForWinHorizontal = this.checkForWinHorizontal.bind(this);
+    this.checkForWinVertical = this.checkForWinVertical.bind(this);
     this.changePlayerTurn = this.changePlayerTurn.bind(this);
 
   }
@@ -55,6 +56,7 @@ class App extends React.Component {
     this.placePiece(col);
     this.updateBoardModel(col);
     this.checkForWinHorizontal(row);
+    this.checkForWinVertical(col);
     this.updateRowAvailableSpace(col);
     this.changePlayerTurn();
 
@@ -62,6 +64,12 @@ class App extends React.Component {
 
   // Places the piece and increments
   placePiece(col) {
+
+    if (!this.state.gameActive) {
+        alert(`We have a winner.  Please start a new game.`);
+        location.reload();
+    }
+
 
     // What Y axis slot to place in clicked row
     let rowPlacement = this.state.rowPlacementOnYAxis[col];
@@ -109,21 +117,50 @@ class App extends React.Component {
     let player = this.state.player;
     let winningCombo = [player, player, player, player];
 
-    console.log(checkRow.slice(3, 7));
 
+    // There's a more succint way to do this but this is OK for now
     if ( JSON.stringify(checkRow.slice(0, 4)) === JSON.stringify(winningCombo) ||
          JSON.stringify(checkRow.slice(1, 5)) === JSON.stringify(winningCombo) ||
          JSON.stringify(checkRow.slice(2, 6)) === JSON.stringify(winningCombo) ||
          JSON.stringify(checkRow.slice(3, 7)) === JSON.stringify(winningCombo) ) {
             this.setState({
-              message: `${this.state.player} WON!`
+              message: `${this.state.player} WON!`,
+              gameActive: false
             })
          }
 
   }
 
-  checkForWinVertical() {
+  checkForWinVertical(col) {
 
+    // Create an array of player positions in column
+    // Iterate through board grabbing the nth value
+    // Compare that with the possible winning combos
+
+    // Note to self - can add winning combo to state/props to make more DRY
+    // Note to self - break this file into separate modules
+
+    let checkCol = [];
+
+    let getPlayer = this.state.boardModel;
+
+    for (var i = 0; i < 6; i++) {
+      let play = getPlayer[i][col];
+      checkCol.push(play);
+    };
+
+    let player = this.state.player;
+    let winningCombo = [player, player, player, player];
+
+    if ( JSON.stringify(checkCol.slice(0, 4)) === JSON.stringify(winningCombo) ||
+         JSON.stringify(checkCol.slice(1, 5)) === JSON.stringify(winningCombo) ||
+         JSON.stringify(checkCol.slice(2, 6)) === JSON.stringify(winningCombo) ||
+         JSON.stringify(checkCol.slice(3, 7)) === JSON.stringify(winningCombo) ) {
+            this.setState({
+              message: `${this.state.player} WON!`,
+              gameActive: false
+            });
+         }
   }
 
   checkForWinDiagonal() {
