@@ -7,8 +7,10 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      player: 'red',
+      player: 'Red',
       tie: false,
+      win: false,
+      message: '',
       boardModel: [
         ['', '', '', '', '', '', ''],
         ['', '', '', '', '', '', ''],
@@ -23,6 +25,7 @@ class App extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.placePiece = this.placePiece.bind(this);
     this.updateBoardModel = this.updateBoardModel.bind(this);
+    this.checkForWinHorizontal = this.checkForWinHorizontal.bind(this);
     this.changePlayerTurn = this.changePlayerTurn.bind(this);
 
   }
@@ -40,6 +43,7 @@ class App extends React.Component {
 
     console.log('row:', e.target.getAttribute('data-row'), ' col: ', e.target.getAttribute('data-col'));
     let col = e.target.getAttribute('data-col');
+    let row = e.target.getAttribute('data-row');
 
     // Check if the column is full
     if (this.state.rowPlacementOnYAxis[col] === -1) {
@@ -50,6 +54,7 @@ class App extends React.Component {
 
     this.placePiece(col);
     this.updateBoardModel(col);
+    this.checkForWinHorizontal(row);
     this.updateRowAvailableSpace(col);
     this.changePlayerTurn();
 
@@ -71,7 +76,6 @@ class App extends React.Component {
     // Get the position of the piece that was just played
     // Add it to the boardModel
 
-
     let updatedBoard = this.state.boardModel;
     updatedBoard[this.state.rowPlacementOnYAxis[col]][col] = this.state.player;
 
@@ -92,7 +96,29 @@ class App extends React.Component {
     });
   }
 
-  checkForWinHorizontal() {
+  checkForWinHorizontal(row) {
+    // Check if current row includes 4 player pieces
+    // If it does, display winner message
+
+    // Find the row that the last piece was played on and the player
+
+
+
+    let checkRow = this.state.boardModel[row];
+
+    let player = this.state.player;
+    let winningCombo = [player, player, player, player];
+
+    console.log(checkRow.slice(3, 7));
+
+    if ( JSON.stringify(checkRow.slice(0, 4)) === JSON.stringify(winningCombo) ||
+         JSON.stringify(checkRow.slice(1, 5)) === JSON.stringify(winningCombo) ||
+         JSON.stringify(checkRow.slice(2, 6)) === JSON.stringify(winningCombo) ||
+         JSON.stringify(checkRow.slice(3, 7)) === JSON.stringify(winningCombo) ) {
+            this.setState({
+              message: `${this.state.player} WON!`
+            })
+         }
 
   }
 
@@ -111,13 +137,13 @@ class App extends React.Component {
   // Using X and O for now, will come back and style when functionality complete
   changePlayerTurn() {
 
-    if (this.state.player === 'red') {
+    if (this.state.player === 'Red') {
       this.setState({
-        player: 'blue'
+        player: 'Blue'
       })
     } else {
       this.setState({
-        player: 'red'
+        player: 'Red'
       })
     };
 
@@ -130,6 +156,8 @@ class App extends React.Component {
 
     return (
       <div>
+        <h2>{`${this.state.player}\'s turn`}</h2>
+        <h3>{`${this.state.message}`}</h3>
         <div className="grid-container">
           <Square row={0} col={0} handleClick={this.handleClick} />
           <Square row={0} col={1} handleClick={this.handleClick} />
