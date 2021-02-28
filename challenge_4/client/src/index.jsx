@@ -134,7 +134,6 @@ class App extends React.Component {
   render() {
 
     // Refactor DRY dynamically create board later
-
     return (
       <div>
         <h2>{`${this.state.message}`}</h2>
