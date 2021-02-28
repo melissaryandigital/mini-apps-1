@@ -27,23 +27,15 @@ class App extends React.Component {
     this.updateBoardModel = this.updateBoardModel.bind(this);
     this.checkForWinHorizontal = this.checkForWinHorizontal.bind(this);
     this.checkForWinVertical = this.checkForWinVertical.bind(this);
-    this.checkForWinMinorDiagonal = this.checkForWinMinorDiagonal.bind(this);
+    this.checkForWinDiagonal = this.checkForWinDiagonal.bind(this);
     this.changePlayerTurn = this.changePlayerTurn.bind(this);
 
   }
 
-
-  componentDidMount() {
-
-  }
-
-
-
-
   handleClick(e) {
     e.preventDefault();
 
-    console.log('row:', e.target.getAttribute('data-row'), ' col: ', e.target.getAttribute('data-col'));
+    //console.log('row:', e.target.getAttribute('data-row'), ' col: ', e.target.getAttribute('data-col'));
     let col = e.target.getAttribute('data-col');
     let row = e.target.getAttribute('data-row');
 
@@ -58,7 +50,7 @@ class App extends React.Component {
     this.updateBoardModel(col);
     this.checkForWinHorizontal(row);
     this.checkForWinVertical(col);
-    this.checkForWinMinorDiagonal(col);
+    this.checkForWinDiagonal(col);
     this.checkForTie();
     this.updateRowAvailableSpace(col);
     this.changePlayerTurn();
@@ -162,47 +154,52 @@ class App extends React.Component {
     }
   }
 
-  checkForWinMinorDiagonal(col) {
-    // Check the position of last piece played and player
-    // Define the winning possibilities based on the last play
-    // Compute both diagonals
-    // Compare both diagonals with winning possibilities
+  checkForWinDiagonal(col) {
 
-    let checkDiagonalUp = [];
-    let checkDiagonalDown = [];
-    let getPlayer = this.state.boardModel;
+    // Start with last placed piece
+    // Add 3 row, subtract 3 col
+    // while col <= 7 = if this slice is this.state.player, increment count
+    // If not, check next set of 4
 
-    // Create the 2 current diagonals
-
-    // go col # left and col # down
-
-
-    // Get the last played position based on the column
+    let board = this.state.boardModel;
+    let player = this.state.player;
+    let winningCombo = JSON.stringify([player, player, player, player]);
 
     let startRowPosition = this.state.rowPlacementOnYAxis[col];
-    console.log('last played position: ', startRowPosition, col);
-
-    let play = getPlayer[startRowPosition][col];
-
-    // While the row is < 5 and the col > 0
-    // When the loop ends this is the starting point to start checking the diag
 
     let startRow = startRowPosition;
-    let startCol = col;
-    while (startRow < 5) {
-      startRow++;
+    let startCol = parseInt(col);
+
+    while (startCol > 0 && startRow < 5) {
       startCol--;
+      startRow++;
     }
 
-    console.log('start checking at: ', startRow, startCol);
+    let minorDiag = [];
 
-    let player = this.state.player;
-    let winningCombo = [player, player, player, player];
+    // make the array to check
+    while (startRow >= 0) {
+      minorDiag.push(board[startRow][startCol]);
+      startRow--;
+      startCol++;
+    }
+
+    // Checks minor diag matches winningCombo
+    if (JSON.stringify(minorDiag.slice(0, 4)) === winningCombo ||
+      JSON.stringify(minorDiag.slice(1, 5)) === winningCombo ||
+      JSON.stringify(minorDiag.slice(2, 6)) === winningCombo ||
+      JSON.stringify(minorDiag.slice(3, 7)) === winningCombo) {
+      this.setState({
+        message: `${this.state.player} WON!`,
+        gameActive: false
+      })
+    }
+
   }
 
   checkForTie() {
 
-    const isFull = (val) => val !== '';
+    const isFull = (val) => val === 'Red' || val === 'Blue';
 
     if (this.state.boardModel.every(isFull)) {
       this.setState({
