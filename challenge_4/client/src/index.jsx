@@ -27,7 +27,8 @@ class App extends React.Component {
     this.updateBoardModel = this.updateBoardModel.bind(this);
     this.checkForWinHorizontal = this.checkForWinHorizontal.bind(this);
     this.checkForWinVertical = this.checkForWinVertical.bind(this);
-    this.checkForWinDiagonal = this.checkForWinDiagonal.bind(this);
+    this.checkForWinMinorDiagonal = this.checkForWinMinorDiagonal.bind(this);
+    this.checkForWinMajorDiagonal = this.checkForWinMajorDiagonal.bind(this);
     this.changePlayerTurn = this.changePlayerTurn.bind(this);
 
   }
@@ -50,7 +51,8 @@ class App extends React.Component {
     this.updateBoardModel(col);
     this.checkForWinHorizontal(row);
     this.checkForWinVertical(col);
-    this.checkForWinDiagonal(col);
+    this.checkForWinMinorDiagonal(col);
+    this.checkForWinMajorDiagonal(col);
     this.checkForTie();
     this.updateRowAvailableSpace(col);
     this.changePlayerTurn();
@@ -154,7 +156,7 @@ class App extends React.Component {
     }
   }
 
-  checkForWinDiagonal(col) {
+  checkForWinMinorDiagonal(col) {
 
     // Start with last placed piece
     // Add 3 row, subtract 3 col
@@ -196,6 +198,52 @@ class App extends React.Component {
     }
 
   }
+
+
+  checkForWinMajorDiagonal(col) {
+
+    // Start with last placed piece
+    // Add 3 row, subtract 3 col
+    // while col <= 7 = if this slice is this.state.player, increment count
+    // If not, check next set of 4
+
+    let board = this.state.boardModel;
+    let player = this.state.player;
+    let winningCombo = JSON.stringify([player, player, player, player]);
+
+    let startRowPosition = this.state.rowPlacementOnYAxis[col];
+
+    let startRow = startRowPosition;
+    let startCol = parseInt(col);
+
+    console.log('start :', startRow, startCol);
+    while (startCol > 0 && startRow > 0) {
+      startCol--;
+      startRow--;
+    }
+
+    let majorDiag = [];
+
+    while (startRow <= 5 && startCol <= 7 ) {
+      majorDiag.push(board[startRow][startCol]);
+      startRow++;
+      startCol++;
+    }
+
+    // Checks major diag matches winningCombo
+    if (JSON.stringify(majorDiag.slice(0, 4)) === winningCombo ||
+      JSON.stringify(majorDiag.slice(1, 5)) === winningCombo ||
+      JSON.stringify(majorDiag.slice(2, 6)) === winningCombo ||
+      JSON.stringify(majorDiag.slice(3, 7)) === winningCombo) {
+      this.setState({
+        message: `${this.state.player} WON!`,
+        gameActive: false
+      })
+    }
+
+  }
+
+
 
   checkForTie() {
 
