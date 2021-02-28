@@ -35,7 +35,6 @@ class App extends React.Component {
   handleClick(e) {
     e.preventDefault();
 
-    //console.log('row:', e.target.getAttribute('data-row'), ' col: ', e.target.getAttribute('data-col'));
     let col = e.target.getAttribute('data-col');
     let row = e.target.getAttribute('data-row');
 

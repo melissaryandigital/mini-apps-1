@@ -3,6 +3,7 @@
   grid-template-columns: repeat(7, 1fr);
   background-color: #646f78;
   padding: 10px;
+  background-color:black;
 }
 .grid-item {
   background-color: rgba(255, 255, 255, 0.8);
@@ -11,6 +12,7 @@
   padding: 10px;
   font-size: 30px;
   text-align: center;
+  border-radius: 100px;
 }
 
 .red {
